@@ -84,6 +84,15 @@
             border-radius: 20px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             pointer-events: auto;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .current-location:hover {
+            background: rgba(0, 0, 0, 0.7);
+            border-color: rgba(240, 147, 251, 0.3);
+            transform: translateX(-50%) translateY(-3px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
         }
 
         .location-flag {
@@ -172,6 +181,11 @@
             font-size: 13px;
             opacity: 0.5;
             transition: opacity 0.3s;
+            cursor: pointer;
+        }
+
+        .legend-item:hover {
+            opacity: 1 !important;
         }
 
         .legend-item.unlocked { opacity: 1; }
@@ -206,6 +220,39 @@
             left: 20px;
             font-size: 12px;
             opacity: 0.5;
+        }
+
+        /* ============ HOVER TOOLTIP ============ */
+        .hover-tooltip {
+            position: fixed;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            font-size: 12px;
+            font-weight: 600;
+            pointer-events: none;
+            opacity: 0;
+            transform: translateY(5px);
+            transition: opacity 0.2s, transform 0.2s;
+            z-index: 100;
+            white-space: nowrap;
+        }
+
+        .hover-tooltip.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hover-tooltip-flag {
+            margin-right: 6px;
+        }
+
+        .hover-tooltip-event {
+            font-size: 10px;
+            opacity: 0.6;
+            margin-top: 2px;
         }
 
         @media (max-width: 768px) {
@@ -267,10 +314,505 @@
             .progress-container { bottom: 85px; }
             .header-stats { top: 10px; }
         }
+
+        /* ============ CONTROL PANEL ============ */
+        .control-panel {
+            position: absolute;
+            top: 80px;
+            left: 15px;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            pointer-events: auto;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            font-size: 10px;
+        }
+
+        .control-panel.collapsed {
+            width: auto;
+        }
+
+        .control-panel.collapsed .control-toggle {
+            justify-content: center;
+        }
+
+        .control-panel.collapsed .control-content {
+            display: none;
+        }
+
+        .control-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 10px;
+            background: rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            transition: background 0.2s;
+            gap: 8px;
+        }
+
+        .control-toggle:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .control-toggle-text {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .control-toggle-icon {
+            font-size: 16px;
+            transition: transform 0.5s ease;
+        }
+
+        .control-panel:not(.collapsed) .control-toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .control-panel.collapsed .control-toggle-icon {
+            animation: gear-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes gear-pulse {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(45deg); }
+        }
+
+        .control-panel.collapsed .control-toggle-text {
+            display: none;
+        }
+
+        .control-content {
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-width: 160px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .control-label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .control-value {
+            color: #f093fb;
+            font-weight: 600;
+        }
+
+        .control-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 4px;
+            border-radius: 2px;
+            background: rgba(255, 255, 255, 0.1);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .control-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #f093fb);
+            cursor: pointer;
+            transition: transform 0.2s;
+            box-shadow: 0 2px 6px rgba(102, 126, 234, 0.4);
+        }
+
+        .control-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .control-slider::-moz-range-thumb {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #f093fb);
+            cursor: pointer;
+            border: none;
+        }
+
+        .control-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 2px 0;
+        }
+
+        .control-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 8px 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-size: 200% 200%;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: gradient-shift 4s ease infinite;
+        }
+
+        .control-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .control-button:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .control-button-icon {
+            font-size: 12px;
+        }
+
+        .control-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .control-checkbox input {
+            display: none;
+        }
+
+        .control-checkbox-box {
+            width: 14px;
+            height: 14px;
+            border-radius: 4px;
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .control-checkbox input:checked + .control-checkbox-box {
+            background: linear-gradient(135deg, #667eea, #f093fb);
+            border-color: transparent;
+        }
+
+        .control-checkbox-box::after {
+            content: '✓';
+            color: white;
+            font-size: 8px;
+            font-weight: bold;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.2s;
+        }
+
+        .control-checkbox input:checked + .control-checkbox-box::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .control-checkbox-text {
+            font-size: 9px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        @media (max-width: 768px) {
+            .control-panel {
+                top: auto;
+                bottom: 210px;
+                left: 10px;
+                font-size: 9px;
+            }
+            
+            .control-content {
+                min-width: 140px;
+                padding: 8px;
+                gap: 8px;
+            }
+            
+            .control-toggle {
+                padding: 6px 8px;
+            }
+            
+            .control-button {
+                padding: 6px 10px;
+                font-size: 9px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .control-panel {
+                bottom: 175px;
+            }
+            
+            .control-content {
+                min-width: 130px;
+                padding: 6px;
+                gap: 6px;
+            }
+            
+            .control-label {
+                font-size: 8px;
+            }
+            
+            .control-checkbox-text {
+                font-size: 8px;
+            }
+            
+            .control-button {
+                padding: 5px 8px;
+                font-size: 8px;
+                gap: 4px;
+            }
+            
+            .control-button-icon {
+                font-size: 10px;
+            }
+        }
+
+        /* ============ EVENT MODAL ============ */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0);
+            backdrop-filter: blur(0px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            pointer-events: none;
+            transition: background 0.4s ease, backdrop-filter 0.4s ease;
+        }
+
+        .modal-overlay.active {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, rgba(20, 20, 40, 0.95) 0%, rgba(40, 30, 60, 0.95) 100%);
+            border-radius: 24px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.5),
+                0 0 100px rgba(102, 126, 234, 0.2);
+            opacity: 0;
+            transform: scale(0.3);
+            transition: opacity 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), 
+                        transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: absolute;
+        }
+
+        .modal-overlay.active .modal-content {
+            opacity: 1;
+            transform: scale(1);
+            left: 50% !important;
+            top: 50% !important;
+            transform: translate(-50%, -50%) scale(1) !important;
+        }
+
+        .modal-overlay:not(.active) .modal-content {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.3);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            font-size: 24px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-flag {
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 5px;
+            background: linear-gradient(90deg, #667eea, #f093fb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .modal-dates {
+            font-size: 16px;
+            color: #f093fb;
+            font-weight: 600;
+        }
+
+        .modal-body {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .modal-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .modal-icon {
+            font-size: 20px;
+            width: 30px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .modal-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 3px;
+        }
+
+        .modal-value {
+            font-size: 14px;
+            color: white;
+            line-height: 1.5;
+        }
+
+        .modal-description {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 5px;
+        }
+
+        .modal-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 5px;
+        }
+
+        .modal-tag {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.3), rgba(240, 147, 251, 0.3));
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-website {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 14px;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            justify-content: center;
+        }
+
+        .modal-website:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .modal-locked {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .modal-locked-icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+
+        .modal-locked-text {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 10px;
+        }
+
+        .modal-locked-requirement {
+            font-size: 14px;
+            color: #f093fb;
+            font-weight: 600;
+        }
+
+        @media (max-width: 480px) {
+            .modal-content {
+                padding: 20px;
+                border-radius: 20px;
+            }
+            .modal-flag { font-size: 40px; }
+            .modal-title { font-size: 20px; }
+            .modal-dates { font-size: 14px; }
+            .modal-value { font-size: 13px; }
+        }
     </style>
 </head>
 <body>
     <div id="canvas-container"></div>
+
+    <!-- HOVER TOOLTIP -->
+    <div class="hover-tooltip" id="hoverTooltip">
+        <span class="hover-tooltip-flag" id="tooltipFlag">🇫🇷</span>
+        <span id="tooltipName">Paris</span>
+        <div class="hover-tooltip-event" id="tooltipEvent">Paris Games Week</div>
+    </div>
     
     <div class="ui-overlay">
         <div class="header-stats">
@@ -279,6 +821,78 @@
         </div>
 
         <div class="instructions">🖱️ Drag to rotate • Scroll to zoom</div>
+
+        <!-- CONTROL PANEL -->
+        <div class="control-panel collapsed" id="controlPanel">
+            <div class="control-toggle" onclick="toggleControlPanel()">
+                <span class="control-toggle-icon">⚙️</span>
+                <span class="control-toggle-text">Settings</span>
+            </div>
+            <div class="control-content">
+                <!-- Marker Size -->
+                <div class="control-group">
+                    <div class="control-label">
+                        <span>📍 Markers</span>
+                        <span class="control-value" id="markerSizeValue">100%</span>
+                    </div>
+                    <input type="range" class="control-slider" id="markerSizeSlider" 
+                           min="50" max="200" value="100" oninput="updateMarkerSize(this.value)">
+                </div>
+
+                <!-- Rotation Speed -->
+                <div class="control-group">
+                    <div class="control-label">
+                        <span>🌍 Speed</span>
+                        <span class="control-value" id="rotationSpeedValue">100%</span>
+                    </div>
+                    <input type="range" class="control-slider" id="rotationSpeedSlider" 
+                           min="0" max="300" value="100" oninput="updateRotationSpeed(this.value)">
+                </div>
+
+                <!-- Globe Zoom -->
+                <div class="control-group">
+                    <div class="control-label">
+                        <span>🔍 Zoom</span>
+                        <span class="control-value" id="zoomValue">100%</span>
+                    </div>
+                    <input type="range" class="control-slider" id="zoomSlider" 
+                           min="50" max="150" value="100" oninput="updateZoom(this.value)">
+                </div>
+
+                <!-- Stars Density -->
+                <div class="control-group">
+                    <div class="control-label">
+                        <span>✨ Stars</span>
+                        <span class="control-value" id="starsValue">100%</span>
+                    </div>
+                    <input type="range" class="control-slider" id="starsSlider" 
+                           min="0" max="200" value="100" oninput="updateStars(this.value)">
+                </div>
+
+                <div class="control-divider"></div>
+
+                <!-- Checkboxes -->
+                <label class="control-checkbox">
+                    <input type="checkbox" id="autoRotateCheck" checked onchange="toggleAutoRotate(this.checked)">
+                    <span class="control-checkbox-box"></span>
+                    <span class="control-checkbox-text">Auto-rotate</span>
+                </label>
+
+                <label class="control-checkbox">
+                    <input type="checkbox" id="showLabelsCheck" checked onchange="toggleLabels(this.checked)">
+                    <span class="control-checkbox-box"></span>
+                    <span class="control-checkbox-text">Labels</span>
+                </label>
+
+                <div class="control-divider"></div>
+
+                <!-- Random Button -->
+                <button class="control-button" onclick="pickRandom()">
+                    <span class="control-button-icon">🎲</span>
+                    <span>Random</span>
+                </button>
+            </div>
+        </div>
 
         <div class="cities-legend">
             <div class="legend-title">🗺️ World Tour</div>
@@ -295,13 +909,23 @@
             </div>
         </div>
 
-        <div class="current-location">
+        <div class="current-location" id="currentLocationCard" onclick="openModal(currentCityIndex, event.clientX, event.clientY)">
             <div class="location-flag" id="locationFlag">🇫🇷</div>
             <div class="location-city" id="locationCity">Paris</div>
             <div class="location-event" id="locationEvent">Paris Games Week</div>
             <div class="location-unlock" id="locationUnlock">
                 <span>🎮</span>
                 <span>L'aventure commence !</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- EVENT MODAL -->
+    <div class="modal-overlay" id="eventModal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <div id="modalInner">
+                <!-- Contenu généré dynamiquement -->
             </div>
         </div>
     </div>
@@ -334,16 +958,169 @@
         };
         // ============================================================
 
-        // ============ CITIES DATA ============
+        // ============ CITIES DATA - MODIFIE ICI LES INFOS DES EVENTS ============
         const cities = [
-            { name: "Paris", flag: "🇫🇷", event: "Paris Games Week", unlock: "L'aventure commence !", lat: 48.8566, lng: 2.3522, threshold: 0, color: 0x667eea },
-            { name: "Cologne", flag: "🇩🇪", event: "Gamescom", unlock: "🎫 Premier event débloqué !", lat: 50.9375, lng: 6.9603, threshold: 100, color: 0xffcc00 },
-            { name: "London", flag: "🇬🇧", event: "PG Connects London", unlock: "🗺️ New territory unlocked !", lat: 51.5074, lng: -0.1278, threshold: 300, color: 0xff6b6b },
-            { name: "San Francisco", flag: "🇺🇸", event: "GDC", unlock: "🎬 Dev zone reached !", lat: 37.7749, lng: -122.4194, threshold: 600, color: 0x4facfe },
-            { name: "Los Angeles", flag: "🇺🇸", event: "Summer Game Fest", unlock: "⭐ Hollywood level !", lat: 34.0522, lng: -118.2437, threshold: 1000, color: 0xf093fb },
-            { name: "Tokyo", flag: "🇯🇵", event: "Tokyo Game Show", unlock: "🏆 Legendary destination !", lat: 35.6762, lng: 139.6503, threshold: 2000, color: 0xff4757 },
-            { name: "Bali", flag: "🇮🇩", event: "IGDX", unlock: "🏝️ Hidden gem found !", lat: -8.3405, lng: 115.0920, threshold: 3500, color: 0x2ed573 },
-            { name: "Worldwide", flag: "🌍", event: "Global Domination", unlock: "🚀 You've conquered the world !", lat: 0, lng: 0, threshold: 5000, color: 0xffd700 }
+            { 
+                name: "Paris", 
+                flag: "🇫🇷", 
+                event: "Paris Games Week", 
+                unlock: "L'aventure commence !", 
+                lat: 48.8566, 
+                lng: 2.3522, 
+                threshold: 0, 
+                color: 0x667eea,
+                // === INFOS EVENT À REMPLIR ===
+                eventDetails: {
+                    fullName: "Paris Games Week 2025",
+                    dates: "23 - 27 Octobre 2025",
+                    venue: "Paris Expo - Porte de Versailles",
+                    website: "https://www.parisgamesweek.com",
+                    description: "Le plus grand salon du jeu vidéo en France. Rencontrez les plus grands éditeurs et découvrez les prochaines sorties.",
+                    attendees: "300,000+",
+                    type: "Public & B2B",
+                    tags: ["AAA", "Indie", "Esport", "Cosplay"]
+                }
+            },
+            { 
+                name: "Cologne", 
+                flag: "🇩🇪", 
+                event: "Gamescom", 
+                unlock: "🎫 Premier event débloqué !", 
+                lat: 50.9375, 
+                lng: 6.9603, 
+                threshold: 100, 
+                color: 0xffcc00,
+                eventDetails: {
+                    fullName: "Gamescom 2025",
+                    dates: "20 - 24 Août 2025",
+                    venue: "Koelnmesse, Cologne",
+                    website: "https://www.gamescom.global",
+                    description: "Le plus grand salon gaming au monde. L'événement incontournable de l'industrie européenne.",
+                    attendees: "370,000+",
+                    type: "Public & B2B",
+                    tags: ["AAA", "Indie", "Hardware", "Esport"]
+                }
+            },
+            { 
+                name: "London", 
+                flag: "🇬🇧", 
+                event: "PG Connects London", 
+                unlock: "🗺️ New territory unlocked !", 
+                lat: 51.5074, 
+                lng: -0.1278, 
+                threshold: 300, 
+                color: 0xff6b6b,
+                eventDetails: {
+                    fullName: "Pocket Gamer Connects London 2025",
+                    dates: "20 - 21 Janvier 2025",
+                    venue: "ExCeL London",
+                    website: "https://www.pgconnects.com/london",
+                    description: "La conférence B2B leader pour l'industrie du jeu mobile et au-delà.",
+                    attendees: "2,500+",
+                    type: "B2B Only",
+                    tags: ["Mobile", "Networking", "Indie", "Publishers"]
+                }
+            },
+            { 
+                name: "San Francisco", 
+                flag: "🇺🇸", 
+                event: "GDC", 
+                unlock: "🎬 Dev zone reached !", 
+                lat: 37.7749, 
+                lng: -122.4194, 
+                threshold: 600, 
+                color: 0x4facfe,
+                eventDetails: {
+                    fullName: "Game Developers Conference 2025",
+                    dates: "17 - 21 Mars 2025",
+                    venue: "Moscone Center, San Francisco",
+                    website: "https://gdconf.com",
+                    description: "La plus grande conférence pour les développeurs de jeux. Talks, workshops et networking.",
+                    attendees: "28,000+",
+                    type: "B2B / Developers",
+                    tags: ["Dev", "Tech", "Career", "Awards"]
+                }
+            },
+            { 
+                name: "Los Angeles", 
+                flag: "🇺🇸", 
+                event: "Summer Game Fest", 
+                unlock: "⭐ Hollywood level !", 
+                lat: 34.0522, 
+                lng: -118.2437, 
+                threshold: 1000, 
+                color: 0xf093fb,
+                eventDetails: {
+                    fullName: "Summer Game Fest 2025",
+                    dates: "Juin 2025",
+                    venue: "YouTube Theater, Los Angeles",
+                    website: "https://www.summergamefest.com",
+                    description: "L'événement qui remplace l'E3. Annonces mondiales et showcases des plus grands studios.",
+                    attendees: "Millions (streaming)",
+                    type: "Public / Streaming",
+                    tags: ["Annonces", "AAA", "World Premieres"]
+                }
+            },
+            { 
+                name: "Tokyo", 
+                flag: "🇯🇵", 
+                event: "Tokyo Game Show", 
+                unlock: "🏆 Legendary destination !", 
+                lat: 35.6762, 
+                lng: 139.6503, 
+                threshold: 2000, 
+                color: 0xff4757,
+                eventDetails: {
+                    fullName: "Tokyo Game Show 2025",
+                    dates: "25 - 28 Septembre 2025",
+                    venue: "Makuhari Messe, Tokyo",
+                    website: "https://tgs.nikkeibp.co.jp",
+                    description: "Le salon gaming majeur en Asie. Focus sur les studios japonais et les dernières innovations.",
+                    attendees: "250,000+",
+                    type: "Public & B2B",
+                    tags: ["JRPG", "Japanese Games", "Tech", "VR"]
+                }
+            },
+            { 
+                name: "Bali", 
+                flag: "🇮🇩", 
+                event: "IGDX", 
+                unlock: "🏝️ Hidden gem found !", 
+                lat: -8.3405, 
+                lng: 115.0920, 
+                threshold: 3500, 
+                color: 0x2ed573,
+                eventDetails: {
+                    fullName: "Indonesia Game Developer Exchange 2025",
+                    dates: "Octobre 2025",
+                    venue: "Bali, Indonesia",
+                    website: "https://igdx.id",
+                    description: "La conférence B2B gaming en pleine croissance en Asie du Sud-Est. Networking dans un cadre paradisiaque.",
+                    attendees: "1,000+",
+                    type: "B2B Only",
+                    tags: ["SEA", "Indie", "Mobile", "Networking"]
+                }
+            },
+            { 
+                name: "Worldwide", 
+                flag: "🌍", 
+                event: "Global Domination", 
+                unlock: "🚀 You've conquered the world !", 
+                lat: 0, 
+                lng: 0, 
+                threshold: 5000, 
+                color: 0xffd700,
+                eventDetails: {
+                    fullName: "🏆 World Tour Complete!",
+                    dates: "All year round",
+                    venue: "Everywhere",
+                    website: "",
+                    description: "Félicitations ! Vous avez exploré tous les événements gaming majeurs du monde !",
+                    attendees: "∞",
+                    type: "Achievement",
+                    tags: ["Complete", "Legend", "Explorer"]
+                }
+            }
         ];
 
         // ============ THREE.JS VARIABLES ============
@@ -359,6 +1136,114 @@
         let currentCityIndex = 0;
         let time = 0;
         let clock = new THREE.Clock();
+        let starsObject = null;
+        let cityLabels = [];
+
+        // ============ DYNAMIC SETTINGS ============
+        let settings = {
+            markerScale: 1.0,
+            rotationSpeed: 1.0,
+            zoomLevel: 1.0,
+            starsBrightness: 1.0,
+            autoRotate: true,
+            showLabels: true
+        };
+
+        // ============ CONTROL PANEL FUNCTIONS ============
+        function toggleControlPanel() {
+            document.getElementById('controlPanel').classList.toggle('collapsed');
+        }
+
+        function updateMarkerSize(value) {
+            settings.markerScale = value / 100;
+            document.getElementById('markerSizeValue').textContent = value + '%';
+        }
+
+        function updateRotationSpeed(value) {
+            settings.rotationSpeed = value / 100;
+            document.getElementById('rotationSpeedValue').textContent = value + '%';
+        }
+
+        function updateZoom(value) {
+            settings.zoomLevel = value / 100;
+            document.getElementById('zoomValue').textContent = value + '%';
+            camera.position.z = 4 / settings.zoomLevel;
+        }
+
+        function updateStars(value) {
+            settings.starsBrightness = value / 100;
+            document.getElementById('starsValue').textContent = value + '%';
+            if (starsObject) {
+                starsObject.material.opacity = 0.8 * settings.starsBrightness;
+            }
+        }
+
+        function toggleAutoRotate(checked) {
+            settings.autoRotate = checked;
+        }
+
+        function toggleLabels(checked) {
+            settings.showLabels = checked;
+            cityLabels.forEach(function(label) {
+                label.visible = checked;
+            });
+        }
+
+        function pickRandom() {
+            // Animation du bouton
+            var btn = event.target.closest('.control-button');
+            btn.style.transform = 'scale(0.95)';
+            setTimeout(function() {
+                btn.style.transform = '';
+            }, 150);
+
+            // Sélectionner une ville random (pas Worldwide)
+            var availableCities = cities.slice(0, -1); // Exclure "Worldwide"
+            var randomIndex = Math.floor(Math.random() * availableCities.length);
+            
+            // Faire tourner le globe vers cette ville
+            var city = cities[randomIndex];
+            var targetLng = -(city.lng + CONFIG.longitudeOffset) * (Math.PI / 180) - Math.PI/2;
+            
+            // Animation de rotation vers la ville
+            var startY = targetRotation.y;
+            var diff = targetLng - startY;
+            
+            // Normaliser la différence pour prendre le chemin le plus court
+            while (diff > Math.PI) diff -= Math.PI * 2;
+            while (diff < -Math.PI) diff += Math.PI * 2;
+            
+            var duration = 1000;
+            var startTime = performance.now();
+            
+            function animateToCity(currentTime) {
+                var progress = Math.min((currentTime - startTime) / duration, 1);
+                var eased = 1 - Math.pow(1 - progress, 3); // ease-out
+                targetRotation.y = startY + diff * eased;
+                
+                if (progress < 1) {
+                    requestAnimationFrame(animateToCity);
+                } else {
+                    // Ouvrir la modal après l'animation
+                    setTimeout(function() {
+                        // Calculer la position du marqueur sur l'écran
+                        var marker = cityMarkers[randomIndex];
+                        if (marker) {
+                            var vector = new THREE.Vector3();
+                            marker.getWorldPosition(vector);
+                            vector.project(camera);
+                            var x = (vector.x * 0.5 + 0.5) * window.innerWidth;
+                            var y = (-vector.y * 0.5 + 0.5) * window.innerHeight;
+                            openModal(randomIndex, x, y);
+                        } else {
+                            openModal(randomIndex, window.innerWidth / 2, window.innerHeight / 2);
+                        }
+                    }, 200);
+                }
+            }
+            
+            requestAnimationFrame(animateToCity);
+        }
 
         // ============ INIT ============
         function init() {
@@ -400,15 +1285,171 @@
             renderer.domElement.addEventListener('mousedown', onMouseDown);
             renderer.domElement.addEventListener('mousemove', onMouseMove);
             renderer.domElement.addEventListener('mouseup', onMouseUp);
-            renderer.domElement.addEventListener('mouseleave', onMouseUp);
+            renderer.domElement.addEventListener('mouseleave', onMouseLeave);
             renderer.domElement.addEventListener('wheel', onMouseWheel);
             renderer.domElement.addEventListener('touchstart', onTouchStart);
             renderer.domElement.addEventListener('touchmove', onTouchMove);
             renderer.domElement.addEventListener('touchend', onMouseUp);
+            renderer.domElement.addEventListener('mouseleave', onMouseLeave);
+            renderer.domElement.addEventListener('click', onCanvasClick);
 
             initCounter();
             animate();
         }
+
+        // ============ MODAL FUNCTIONS ============
+        var raycaster = new THREE.Raycaster();
+        var mouse = new THREE.Vector2();
+        var clickStart = { x: 0, y: 0 };
+
+        function onMouseDown(e) {
+            isDragging = true;
+            previousMousePosition = { x: e.clientX, y: e.clientY };
+            clickStart = { x: e.clientX, y: e.clientY };
+        }
+
+        function onCanvasClick(e) {
+            // Ne pas ouvrir la modal si on a dragué
+            var dragDistance = Math.sqrt(
+                Math.pow(e.clientX - clickStart.x, 2) + 
+                Math.pow(e.clientY - clickStart.y, 2)
+            );
+            if (dragDistance > 10) return;
+
+            // Raycasting pour détecter le clic sur un marqueur
+            mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+
+            raycaster.setFromCamera(mouse, camera);
+            
+            var allMarkerObjects = [];
+            cityMarkers.forEach(function(marker) {
+                marker.traverse(function(child) {
+                    if (child.isMesh) {
+                        child.userData.parentMarker = marker;
+                        allMarkerObjects.push(child);
+                    }
+                });
+            });
+
+            var intersects = raycaster.intersectObjects(allMarkerObjects);
+            
+            if (intersects.length > 0) {
+                var clickedMarker = intersects[0].object.userData.parentMarker;
+                if (clickedMarker && clickedMarker.userData.cityIndex !== undefined) {
+                    openModal(clickedMarker.userData.cityIndex, e.clientX, e.clientY);
+                }
+            }
+        }
+
+        function openModal(cityIndex, clickX, clickY) {
+            var city = cities[cityIndex];
+            var isUnlocked = visitorCount >= city.threshold;
+            var modalInner = document.getElementById('modalInner');
+            var modalContent = document.querySelector('.modal-content');
+            var modalOverlay = document.getElementById('eventModal');
+            
+            // Position de départ (depuis le clic)
+            if (clickX !== undefined && clickY !== undefined) {
+                modalContent.style.left = clickX + 'px';
+                modalContent.style.top = clickY + 'px';
+                modalContent.style.transform = 'translate(-50%, -50%) scale(0.3)';
+            } else {
+                // Fallback au centre
+                modalContent.style.left = '50%';
+                modalContent.style.top = '50%';
+                modalContent.style.transform = 'translate(-50%, -50%) scale(0.3)';
+            }
+            
+            if (isUnlocked) {
+                var details = city.eventDetails;
+                var tagsHTML = details.tags.map(function(tag) {
+                    return '<span class="modal-tag">' + tag + '</span>';
+                }).join('');
+                
+                var websiteHTML = details.website ? 
+                    '<a href="' + details.website + '" target="_blank" class="modal-website">🌐 Visiter le site officiel</a>' : '';
+
+                modalInner.innerHTML = 
+                    '<div class="modal-header">' +
+                        '<div class="modal-flag">' + city.flag + '</div>' +
+                        '<div class="modal-title">' + details.fullName + '</div>' +
+                        '<div class="modal-dates">📅 ' + details.dates + '</div>' +
+                    '</div>' +
+                    '<div class="modal-body">' +
+                        '<div class="modal-row">' +
+                            '<span class="modal-icon">📍</span>' +
+                            '<div>' +
+                                '<div class="modal-label">Lieu</div>' +
+                                '<div class="modal-value">' + details.venue + '</div>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="modal-row">' +
+                            '<span class="modal-icon">👥</span>' +
+                            '<div>' +
+                                '<div class="modal-label">Visiteurs</div>' +
+                                '<div class="modal-value">' + details.attendees + '</div>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="modal-row">' +
+                            '<span class="modal-icon">🎫</span>' +
+                            '<div>' +
+                                '<div class="modal-label">Type</div>' +
+                                '<div class="modal-value">' + details.type + '</div>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="modal-row">' +
+                            '<span class="modal-icon">📝</span>' +
+                            '<div>' +
+                                '<div class="modal-label">Description</div>' +
+                                '<div class="modal-value modal-description">' + details.description + '</div>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="modal-row">' +
+                            '<span class="modal-icon">🏷️</span>' +
+                            '<div>' +
+                                '<div class="modal-label">Tags</div>' +
+                                '<div class="modal-tags">' + tagsHTML + '</div>' +
+                            '</div>' +
+                        '</div>' +
+                        websiteHTML +
+                    '</div>';
+            } else {
+                modalInner.innerHTML = 
+                    '<div class="modal-locked">' +
+                        '<div class="modal-locked-icon">🔒</div>' +
+                        '<div class="modal-flag">' + city.flag + '</div>' +
+                        '<div class="modal-title">' + city.event + '</div>' +
+                        '<div class="modal-locked-text">Cette destination n\'est pas encore débloquée</div>' +
+                        '<div class="modal-locked-requirement">🎯 Requis : ' + city.threshold + ' visiteurs</div>' +
+                    '</div>';
+            }
+
+            // Déclencher l'animation après un petit délai
+            requestAnimationFrame(function() {
+                modalOverlay.classList.add('active');
+            });
+        }
+
+        function closeModal(e) {
+            if (e && e.target !== e.currentTarget) return;
+            var modalOverlay = document.getElementById('eventModal');
+            var modalContent = document.querySelector('.modal-content');
+            
+            // Animation de fermeture
+            modalContent.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+            modalOverlay.classList.remove('active');
+            
+            // Reset transition après fermeture
+            setTimeout(function() {
+                modalContent.style.transition = 'opacity 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+            }, 300);
+        }
+
+        // Fermer avec Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeModal();
+        });
 
         // ============ GLOBE AVEC TEXTURE ============
         function createGlobe() {
@@ -550,67 +1591,20 @@
                 markerGroup.setRotationFromQuaternion(quaternion);
 
                 // === BASE DU PIN (cercle au sol) ===
-                var baseRingGeometry = new THREE.RingGeometry(0.015, 0.022, 32);
+                var baseRingGeometry = new THREE.RingGeometry(0.012, 0.018, 32);
                 var baseRingMaterial = new THREE.MeshBasicMaterial({
                     color: city.color,
                     side: THREE.DoubleSide,
                     transparent: true,
-                    opacity: 0.8
+                    opacity: 0.6
                 });
                 var baseRing = new THREE.Mesh(baseRingGeometry, baseRingMaterial);
                 baseRing.rotation.x = -Math.PI / 2;
-                baseRing.position.y = 0.002;
+                baseRing.position.y = 0.001;
                 markerGroup.add(baseRing);
 
-                // === TIGE DU PIN ===
-                var stemGeometry = new THREE.CylinderGeometry(0.004, 0.006, 0.05, 8);
-                var stemMaterial = new THREE.MeshPhongMaterial({
-                    color: 0xffffff,
-                    emissive: 0x333333,
-                    emissiveIntensity: 0.2,
-                    shininess: 80
-                });
-                var stem = new THREE.Mesh(stemGeometry, stemMaterial);
-                stem.position.y = 0.027;
-                markerGroup.add(stem);
-
-                // === TÊTE DU PIN (goutte/ballon) ===
-                var headGeometry = new THREE.SphereGeometry(0.022, 32, 32);
-                var headMaterial = new THREE.MeshPhongMaterial({
-                    color: city.color,
-                    emissive: city.color,
-                    emissiveIntensity: 0.4,
-                    shininess: 100,
-                    specular: 0xffffff
-                });
-                var head = new THREE.Mesh(headGeometry, headMaterial);
-                head.position.y = 0.07;
-                markerGroup.add(head);
-
-                // === REFLET SUR LA TÊTE ===
-                var highlightGeometry = new THREE.SphereGeometry(0.008, 16, 16);
-                var highlightMaterial = new THREE.MeshBasicMaterial({
-                    color: 0xffffff,
-                    transparent: true,
-                    opacity: 0.6
-                });
-                var highlight = new THREE.Mesh(highlightGeometry, highlightMaterial);
-                highlight.position.set(-0.008, 0.078, 0.012);
-                markerGroup.add(highlight);
-
-                // === GLOW AUTOUR DE LA TÊTE ===
-                var glowGeometry = new THREE.SphereGeometry(0.035, 16, 16);
-                var glowMaterial = new THREE.MeshBasicMaterial({
-                    color: city.color,
-                    transparent: true,
-                    opacity: 0.15
-                });
-                var glow = new THREE.Mesh(glowGeometry, glowMaterial);
-                glow.position.y = 0.07;
-                markerGroup.add(glow);
-
                 // === ANNEAU LUMINEUX À LA BASE ===
-                var pulseRingGeometry = new THREE.RingGeometry(0.025, 0.035, 32);
+                var pulseRingGeometry = new THREE.RingGeometry(0.02, 0.03, 32);
                 var pulseRingMaterial = new THREE.MeshBasicMaterial({
                     color: city.color,
                     side: THREE.DoubleSide,
@@ -619,14 +1613,33 @@
                 });
                 var pulseRing = new THREE.Mesh(pulseRingGeometry, pulseRingMaterial);
                 pulseRing.rotation.x = -Math.PI / 2;
-                pulseRing.position.y = 0.003;
+                pulseRing.position.y = 0.002;
                 pulseRing.userData.isPulseRing = true;
                 markerGroup.add(pulseRing);
 
                 // === LABEL 3D ===
                 var label = createCityLabel(city.name, city.flag, city.color);
-                label.position.y = 0.12;
+                label.position.y = 0.16;
                 markerGroup.add(label);
+                cityLabels.push(label);
+
+                // === HITBOX INVISIBLE (pour faciliter le hover) ===
+                var hitboxGeometry = new THREE.PlaneGeometry(0.25, 0.20);
+                var hitboxMaterial = new THREE.MeshBasicMaterial({
+                    transparent: true,
+                    opacity: 0,
+                    side: THREE.DoubleSide,
+                    depthWrite: false
+                });
+                var hitbox = new THREE.Mesh(hitboxGeometry, hitboxMaterial);
+                hitbox.position.y = 0.08;
+                hitbox.userData.isHitbox = true;
+                markerGroup.add(hitbox);
+
+                // === BÂTIMENT 3D CARTOON ===
+                var building = createCityBuilding(city.name, city.color);
+                building.position.y = 0.0;
+                markerGroup.add(building);
 
                 markerGroup.userData = { cityIndex: index };
                 globeGroup.add(markerGroup);
@@ -673,6 +1686,275 @@
             sprite.scale.set(0.25, 0.0625, 1);
             
             return sprite;
+        }
+
+        // ============ CARTOON BUILDINGS ============
+        function createCityBuilding(cityName, color) {
+            var building = new THREE.Group();
+            
+            switch(cityName) {
+                case "Paris":
+                    building = createEiffelTower(color);
+                    break;
+                case "Cologne":
+                    building = createCathedral(color);
+                    break;
+                case "London":
+                    building = createBigBen(color);
+                    break;
+                case "San Francisco":
+                    building = createGoldenGate(color);
+                    break;
+                case "Los Angeles":
+                    building = createHollywood(color);
+                    break;
+                case "Tokyo":
+                    building = createTorii(color);
+                    break;
+                case "Bali":
+                    building = createBaliTemple(color);
+                    break;
+                default:
+                    building = createDefaultBuilding(color);
+            }
+            
+            return building;
+        }
+
+        function createEiffelTower(color) {
+            var group = new THREE.Group();
+            var material = new THREE.MeshPhongMaterial({ color: 0x8b7355, emissive: 0x2a2015, emissiveIntensity: 0.3 });
+            
+            // Base (4 pieds)
+            for (var i = 0; i < 4; i++) {
+                var angle = (i / 4) * Math.PI * 2 + Math.PI / 4;
+                var legGeom = new THREE.CylinderGeometry(0.003, 0.008, 0.04, 6);
+                var leg = new THREE.Mesh(legGeom, material);
+                leg.position.set(Math.cos(angle) * 0.015, 0.02, Math.sin(angle) * 0.015);
+                leg.rotation.z = Math.cos(angle) * 0.3;
+                leg.rotation.x = Math.sin(angle) * 0.3;
+                group.add(leg);
+            }
+            
+            // Corps central
+            var bodyGeom = new THREE.CylinderGeometry(0.002, 0.012, 0.05, 4);
+            var body = new THREE.Mesh(bodyGeom, material);
+            body.position.y = 0.045;
+            group.add(body);
+            
+            // Sommet
+            var topGeom = new THREE.CylinderGeometry(0.001, 0.003, 0.025, 4);
+            var top = new THREE.Mesh(topGeom, material);
+            top.position.y = 0.08;
+            group.add(top);
+            
+            // Antenne
+            var antennaGeom = new THREE.CylinderGeometry(0.001, 0.001, 0.015, 4);
+            var antenna = new THREE.Mesh(antennaGeom, material);
+            antenna.position.y = 0.10;
+            group.add(antenna);
+            
+            // Lumière au sommet
+            var lightGeom = new THREE.SphereGeometry(0.003, 8, 8);
+            var lightMat = new THREE.MeshBasicMaterial({ color: 0xffdd44 });
+            var light = new THREE.Mesh(lightGeom, lightMat);
+            light.position.y = 0.11;
+            group.add(light);
+            
+            return group;
+        }
+
+        function createCathedral(color) {
+            var group = new THREE.Group();
+            var material = new THREE.MeshPhongMaterial({ color: 0x888888, emissive: 0x222222, emissiveIntensity: 0.2 });
+            
+            // Corps principal
+            var bodyGeom = new THREE.BoxGeometry(0.03, 0.04, 0.02);
+            var body = new THREE.Mesh(bodyGeom, material);
+            body.position.y = 0.02;
+            group.add(body);
+            
+            // Deux tours
+            for (var i = -1; i <= 1; i += 2) {
+                var towerGeom = new THREE.BoxGeometry(0.012, 0.06, 0.012);
+                var tower = new THREE.Mesh(towerGeom, material);
+                tower.position.set(i * 0.012, 0.03, 0);
+                group.add(tower);
+                
+                // Flèche
+                var spireGeom = new THREE.ConeGeometry(0.008, 0.025, 4);
+                var spire = new THREE.Mesh(spireGeom, material);
+                spire.position.set(i * 0.012, 0.07, 0);
+                group.add(spire);
+            }
+            
+            return group;
+        }
+
+        function createBigBen(color) {
+            var group = new THREE.Group();
+            var material = new THREE.MeshPhongMaterial({ color: 0xc9a86c, emissive: 0x3a3020, emissiveIntensity: 0.2 });
+            
+            // Tour principale
+            var towerGeom = new THREE.BoxGeometry(0.02, 0.07, 0.02);
+            var tower = new THREE.Mesh(towerGeom, material);
+            tower.position.y = 0.035;
+            group.add(tower);
+            
+            // Horloge (face)
+            var clockGeom = new THREE.CircleGeometry(0.008, 16);
+            var clockMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+            var clock = new THREE.Mesh(clockGeom, clockMat);
+            clock.position.set(0, 0.05, 0.011);
+            group.add(clock);
+            
+            // Toit
+            var roofGeom = new THREE.ConeGeometry(0.015, 0.025, 4);
+            var roof = new THREE.Mesh(roofGeom, material);
+            roof.position.y = 0.08;
+            roof.rotation.y = Math.PI / 4;
+            group.add(roof);
+            
+            // Flèche dorée
+            var spireGeom = new THREE.ConeGeometry(0.003, 0.015, 4);
+            var spireMat = new THREE.MeshPhongMaterial({ color: 0xffd700 });
+            var spire = new THREE.Mesh(spireGeom, spireMat);
+            spire.position.y = 0.10;
+            group.add(spire);
+            
+            return group;
+        }
+
+        function createGoldenGate(color) {
+            var group = new THREE.Group();
+            var material = new THREE.MeshPhongMaterial({ color: 0xc13a28, emissive: 0x3a1010, emissiveIntensity: 0.3 });
+            
+            // Deux pylônes
+            for (var i = -1; i <= 1; i += 2) {
+                var pylonGeom = new THREE.BoxGeometry(0.008, 0.07, 0.008);
+                var pylon = new THREE.Mesh(pylonGeom, material);
+                pylon.position.set(i * 0.025, 0.035, 0);
+                group.add(pylon);
+            }
+            
+            // Câble supérieur
+            var cableGeom = new THREE.CylinderGeometry(0.002, 0.002, 0.06, 8);
+            var cable = new THREE.Mesh(cableGeom, material);
+            cable.position.y = 0.065;
+            cable.rotation.z = Math.PI / 2;
+            group.add(cable);
+            
+            // Route
+            var roadGeom = new THREE.BoxGeometry(0.07, 0.005, 0.015);
+            var roadMat = new THREE.MeshPhongMaterial({ color: 0x333333 });
+            var road = new THREE.Mesh(roadGeom, roadMat);
+            road.position.y = 0.01;
+            group.add(road);
+            
+            return group;
+        }
+
+        function createHollywood(color) {
+            var group = new THREE.Group();
+            
+            // Palmier
+            var trunkMat = new THREE.MeshPhongMaterial({ color: 0x8b6914 });
+            var trunkGeom = new THREE.CylinderGeometry(0.004, 0.006, 0.05, 8);
+            var trunk = new THREE.Mesh(trunkGeom, trunkMat);
+            trunk.position.set(-0.02, 0.025, 0);
+            group.add(trunk);
+            
+            // Feuilles
+            var leafMat = new THREE.MeshPhongMaterial({ color: 0x228b22, side: THREE.DoubleSide });
+            for (var i = 0; i < 6; i++) {
+                var angle = (i / 6) * Math.PI * 2;
+                var leafGeom = new THREE.ConeGeometry(0.008, 0.025, 4);
+                var leaf = new THREE.Mesh(leafGeom, leafMat);
+                leaf.position.set(-0.02 + Math.cos(angle) * 0.01, 0.055, Math.sin(angle) * 0.01);
+                leaf.rotation.z = Math.cos(angle) * 0.8;
+                leaf.rotation.x = Math.sin(angle) * 0.8;
+                group.add(leaf);
+            }
+            
+            // Étoile
+            var starMat = new THREE.MeshPhongMaterial({ color: 0xffd700, emissive: 0xffd700, emissiveIntensity: 0.5 });
+            var starGeom = new THREE.OctahedronGeometry(0.012, 0);
+            var star = new THREE.Mesh(starGeom, starMat);
+            star.position.set(0.02, 0.03, 0);
+            star.rotation.z = Math.PI / 4;
+            group.add(star);
+            
+            return group;
+        }
+
+        function createTorii(color) {
+            var group = new THREE.Group();
+            var material = new THREE.MeshPhongMaterial({ color: 0xd62728, emissive: 0x4a0a0a, emissiveIntensity: 0.3 });
+            
+            // Deux piliers
+            for (var i = -1; i <= 1; i += 2) {
+                var pillarGeom = new THREE.CylinderGeometry(0.004, 0.005, 0.06, 8);
+                var pillar = new THREE.Mesh(pillarGeom, material);
+                pillar.position.set(i * 0.02, 0.03, 0);
+                group.add(pillar);
+            }
+            
+            // Barre supérieure (kasagi)
+            var topBarGeom = new THREE.BoxGeometry(0.06, 0.006, 0.008);
+            var topBar = new THREE.Mesh(topBarGeom, material);
+            topBar.position.y = 0.06;
+            group.add(topBar);
+            
+            // Barre intermédiaire
+            var midBarGeom = new THREE.BoxGeometry(0.05, 0.004, 0.006);
+            var midBar = new THREE.Mesh(midBarGeom, material);
+            midBar.position.y = 0.045;
+            group.add(midBar);
+            
+            return group;
+        }
+
+        function createBaliTemple(color) {
+            var group = new THREE.Group();
+            var material = new THREE.MeshPhongMaterial({ color: 0x8b7355, emissive: 0x2a2015, emissiveIntensity: 0.2 });
+            
+            // Base
+            var baseGeom = new THREE.BoxGeometry(0.03, 0.01, 0.03);
+            var base = new THREE.Mesh(baseGeom, material);
+            base.position.y = 0.005;
+            group.add(base);
+            
+            // Niveaux du temple (style Meru)
+            var levels = 5;
+            for (var i = 0; i < levels; i++) {
+                var size = 0.025 - i * 0.004;
+                var levelGeom = new THREE.ConeGeometry(size, 0.012, 4);
+                var level = new THREE.Mesh(levelGeom, material);
+                level.position.y = 0.015 + i * 0.012;
+                level.rotation.y = Math.PI / 4;
+                group.add(level);
+            }
+            
+            // Sommet doré
+            var topGeom = new THREE.SphereGeometry(0.004, 8, 8);
+            var topMat = new THREE.MeshPhongMaterial({ color: 0xffd700 });
+            var top = new THREE.Mesh(topGeom, topMat);
+            top.position.y = 0.075;
+            group.add(top);
+            
+            return group;
+        }
+
+        function createDefaultBuilding(color) {
+            var group = new THREE.Group();
+            var material = new THREE.MeshPhongMaterial({ color: color, emissive: color, emissiveIntensity: 0.2 });
+            
+            var buildingGeom = new THREE.BoxGeometry(0.02, 0.04, 0.02);
+            var building = new THREE.Mesh(buildingGeom, material);
+            building.position.y = 0.02;
+            group.add(building);
+            
+            return group;
         }
 
         // ============ ROUTE ============
@@ -865,16 +2147,66 @@
             }
             starsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starsVertices, 3));
             var starsMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.1, transparent: true, opacity: 0.8 });
-            scene.add(new THREE.Points(starsGeometry, starsMaterial));
+            starsObject = new THREE.Points(starsGeometry, starsMaterial);
+            scene.add(starsObject);
         }
 
         // ============ CONTROLS ============
-        function onMouseDown(e) {
-            isDragging = true;
-            previousMousePosition = { x: e.clientX, y: e.clientY };
-        }
-
         function onMouseMove(e) {
+            // Raycasting pour détecter le survol des marqueurs
+            mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+            raycaster.setFromCamera(mouse, camera);
+            
+            // Collecter tous les objets des marqueurs (incluant les hitbox)
+            var allMarkerObjects = [];
+            cityMarkers.forEach(function(marker) {
+                marker.traverse(function(child) {
+                    if (child.isMesh) {
+                        child.userData.parentMarker = marker;
+                        allMarkerObjects.push(child);
+                    }
+                });
+            });
+            
+            var intersects = raycaster.intersectObjects(allMarkerObjects);
+            var tooltip = document.getElementById('hoverTooltip');
+            
+            // Reset tous les marqueurs
+            cityMarkers.forEach(function(marker) {
+                marker.userData.isHovered = false;
+            });
+            
+            if (intersects.length > 0) {
+                // Trouver le marqueur parent via userData
+                var hoveredMarker = intersects[0].object.userData.parentMarker;
+                var hoveredCityIndex = -1;
+                
+                if (hoveredMarker) {
+                    hoveredMarker.userData.isHovered = true;
+                    hoveredCityIndex = hoveredMarker.userData.cityIndex;
+                }
+                
+                // Afficher le tooltip
+                if (hoveredCityIndex >= 0) {
+                    var city = cities[hoveredCityIndex];
+                    var isUnlocked = visitorCount >= city.threshold;
+                    
+                    document.getElementById('tooltipFlag').textContent = city.flag;
+                    document.getElementById('tooltipName').textContent = city.name;
+                    document.getElementById('tooltipEvent').textContent = isUnlocked ? city.event : '🔒 ' + city.threshold + ' visitors';
+                    
+                    tooltip.style.left = (e.clientX + 15) + 'px';
+                    tooltip.style.top = (e.clientY - 10) + 'px';
+                    tooltip.classList.add('visible');
+                }
+                
+                renderer.domElement.style.cursor = 'pointer';
+            } else {
+                tooltip.classList.remove('visible');
+                renderer.domElement.style.cursor = isDragging ? 'grabbing' : 'grab';
+            }
+            
             if (!isDragging) return;
             targetRotation.y += (e.clientX - previousMousePosition.x) * 0.005;
             targetRotation.x += (e.clientY - previousMousePosition.y) * 0.005;
@@ -882,7 +2214,18 @@
             previousMousePosition = { x: e.clientX, y: e.clientY };
         }
 
-        function onMouseUp() { isDragging = false; }
+        function onMouseUp() { 
+            isDragging = false;
+            document.getElementById('hoverTooltip').classList.remove('visible');
+        }
+
+        function onMouseLeave() {
+            isDragging = false;
+            document.getElementById('hoverTooltip').classList.remove('visible');
+            cityMarkers.forEach(function(marker) {
+                marker.userData.isHovered = false;
+            });
+        }
 
         function onMouseWheel(e) {
             camera.position.z = Math.max(2, Math.min(6, camera.position.z + e.deltaY * 0.002));
@@ -952,7 +2295,7 @@
             cities.forEach(function(city, index) {
                 var unlockedClass = visitorCount >= city.threshold ? 'unlocked' : '';
                 var currentClass = index === currentCityIndex ? 'current' : '';
-                legendHTML += '<div class="legend-item ' + unlockedClass + ' ' + currentClass + '">' +
+                legendHTML += '<div class="legend-item ' + unlockedClass + ' ' + currentClass + '" onclick="openModal(' + index + ', event.clientX, event.clientY)">' +
                     '<span class="legend-dot"></span>' +
                     '<span>' + city.flag + ' ' + city.name + '</span>' +
                     '</div>';
@@ -1004,35 +2347,50 @@
             globeGroup.rotation.x = currentRotation.x;
             globeGroup.rotation.y = currentRotation.y;
 
-            if (!isDragging) targetRotation.y += 0.001;
+            if (!isDragging && settings.autoRotate) {
+                targetRotation.y += 0.001 * settings.rotationSpeed;
+            }
 
             // Character bobbing
             if (character) {
                 character.position.y += Math.sin(time * 4) * 0.0002;
             }
 
-            // Pulse current city marker + animate rings
+            // Pulse current city marker + animate rings + hover effect
             cityMarkers.forEach(function(marker, index) {
                 var isCurrent = index === currentCityIndex;
                 var isUnlocked = visitorCount >= cities[index].threshold;
+                var isHovered = marker.userData.isHovered;
                 
-                // Scale du marqueur
-                if (isCurrent) {
-                    marker.scale.setScalar(1.3 + Math.sin(time * 3) * 0.1);
-                } else {
-                    marker.scale.setScalar(isUnlocked ? 1 : 0.6);
-                }
+                // Scale du marqueur avec le multiplicateur global + hover boost
+                var baseScale = isCurrent ? 1.3 : (isUnlocked ? 1 : 0.6);
+                var pulseScale = isCurrent ? Math.sin(time * 3) * 0.1 : 0;
+                var hoverBoost = isHovered ? 0.3 : 0;
+                marker.scale.setScalar((baseScale + pulseScale + hoverBoost) * settings.markerScale);
                 
-                // Animation des anneaux pulse
+                // Animation des anneaux pulse + hover glow
                 marker.traverse(function(child) {
                     if (child.userData && child.userData.isPulseRing) {
-                        if (isCurrent) {
-                            var pulseScale = 1 + Math.sin(time * 2) * 0.3;
-                            child.scale.set(pulseScale, pulseScale, 1);
+                        if (isHovered) {
+                            var hoverPulse = 1 + Math.sin(time * 5) * 0.4;
+                            child.scale.set(hoverPulse * 1.5, hoverPulse * 1.5, 1);
+                            child.material.opacity = 0.6;
+                        } else if (isCurrent) {
+                            var pulseRingScale = 1 + Math.sin(time * 2) * 0.3;
+                            child.scale.set(pulseRingScale, pulseRingScale, 1);
                             child.material.opacity = 0.4 - Math.sin(time * 2) * 0.2;
                         } else {
                             child.scale.set(1, 1, 1);
                             child.material.opacity = isUnlocked ? 0.2 : 0.1;
+                        }
+                    }
+                    
+                    // Boost emissive au hover
+                    if (child.isMesh && child.material && child.material.emissive) {
+                        if (isHovered) {
+                            child.material.emissiveIntensity = 0.8;
+                        } else {
+                            child.material.emissiveIntensity = isCurrent ? 0.5 : 0.3;
                         }
                     }
                 });
