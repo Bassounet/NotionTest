@@ -18,6 +18,7 @@
             justify-content: center;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: transparent;
+            overflow: hidden;
         }
 
         .btn-container {
@@ -37,7 +38,7 @@
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            overflow: hidden;
+            overflow: visible;
             transition: all 0.3s ease;
             animation: gradient-shift 3s ease infinite;
             box-shadow: 
@@ -84,7 +85,7 @@
             50% { opacity: 0.8; transform: scale(1.02); }
         }
 
-        /* Particules brillantes */
+        /* Particules brillantes permanentes */
         .sparkle {
             position: absolute;
             width: 6px;
@@ -128,7 +129,7 @@
             100% { background-position: 200% center; }
         }
 
-        /* Petit badge "NEW" ou icône optionnel */
+        /* Badge */
         .badge {
             position: absolute;
             top: -8px;
@@ -147,11 +148,121 @@
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-3px); }
         }
+
+        /* ========== FALLING PARTICLES ========== */
+        .falling-particle {
+            position: absolute;
+            pointer-events: none;
+            font-weight: 800;
+            font-size: 14px;
+            text-transform: uppercase;
+            opacity: 0;
+            z-index: 100;
+            text-shadow: 0 0 10px currentColor;
+            animation: fall-down 1.5s ease-out forwards;
+        }
+
+        @keyframes fall-down {
+            0% {
+                opacity: 1;
+                transform: translateY(0) rotate(0deg) scale(1);
+            }
+            20% {
+                opacity: 1;
+                transform: translateY(20px) rotate(15deg) scale(1.1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(150px) rotate(45deg) scale(0.5);
+            }
+        }
+
+        /* Variantes de couleurs pour les particules */
+        .particle-pink { color: #f093fb; }
+        .particle-blue { color: #4facfe; }
+        .particle-purple { color: #764ba2; }
+        .particle-red { color: #f5576c; }
+        .particle-cyan { color: #667eea; }
+        .particle-gold { color: #ffd700; }
+        .particle-white { color: #ffffff; }
+
+        /* Effet spécial pour les icônes */
+        .particle-icon {
+            font-size: 18px;
+        }
+
+        /* Différentes vitesses de chute */
+        .fall-slow { animation-duration: 2s; }
+        .fall-fast { animation-duration: 1s; }
+        .fall-medium { animation-duration: 1.5s; }
+
+        /* Différentes directions de rotation */
+        .spin-left {
+            animation-name: fall-down-left;
+        }
+
+        @keyframes fall-down-left {
+            0% {
+                opacity: 1;
+                transform: translateY(0) translateX(0) rotate(0deg) scale(1);
+            }
+            20% {
+                opacity: 1;
+                transform: translateY(20px) translateX(-10px) rotate(-15deg) scale(1.1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(150px) translateX(-40px) rotate(-60deg) scale(0.5);
+            }
+        }
+
+        .spin-right {
+            animation-name: fall-down-right;
+        }
+
+        @keyframes fall-down-right {
+            0% {
+                opacity: 1;
+                transform: translateY(0) translateX(0) rotate(0deg) scale(1);
+            }
+            20% {
+                opacity: 1;
+                transform: translateY(20px) translateX(10px) rotate(15deg) scale(1.1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(150px) translateX(40px) rotate(60deg) scale(0.5);
+            }
+        }
+
+        .spin-wobble {
+            animation-name: fall-down-wobble;
+        }
+
+        @keyframes fall-down-wobble {
+            0% {
+                opacity: 1;
+                transform: translateY(0) rotate(0deg) scale(1);
+            }
+            25% {
+                transform: translateY(30px) translateX(15px) rotate(20deg) scale(1.05);
+            }
+            50% {
+                transform: translateY(70px) translateX(-10px) rotate(-10deg) scale(0.9);
+            }
+            75% {
+                transform: translateY(110px) translateX(10px) rotate(15deg) scale(0.7);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(150px) translateX(0) rotate(0deg) scale(0.4);
+            }
+        }
     </style>
 </head>
 <body>
     <div class="btn-container">
-        <button class="btn" onclick="handleClick()">
+        <button class="btn" id="mainBtn" onclick="handleClick()">
             <span class="sparkle"></span>
             <span class="sparkle"></span>
             <span class="sparkle"></span>
@@ -163,9 +274,100 @@
     </div>
 
     <script>
+        const btn = document.getElementById('mainBtn');
+        const container = document.querySelector('.btn-container');
+        
+        // Textes et symboles qui tombent
+        const particles = [
+            '+', '+', '+',
+            'NEW', 'NEW',
+            'EVENT', 'EVENT',
+            '★', '✦', '✧',
+            '!', '?',
+            '🎮', '🎯', '🚀', '⚡', '🔥',
+            'HOT', 'GO', 'ADD'
+        ];
+
+        const colors = [
+            'particle-pink',
+            'particle-blue', 
+            'particle-purple',
+            'particle-red',
+            'particle-cyan',
+            'particle-gold',
+            'particle-white'
+        ];
+
+        const speeds = ['fall-slow', 'fall-fast', 'fall-medium'];
+        const spins = ['spin-left', 'spin-right', 'spin-wobble', ''];
+
+        let isHovering = false;
+        let particleInterval;
+
+        function createParticle() {
+            const particle = document.createElement('span');
+            particle.className = 'falling-particle';
+            
+            // Choix aléatoire du contenu
+            const text = particles[Math.floor(Math.random() * particles.length)];
+            particle.textContent = text;
+            
+            // Ajout des classes aléatoires
+            particle.classList.add(colors[Math.floor(Math.random() * colors.length)]);
+            particle.classList.add(speeds[Math.floor(Math.random() * speeds.length)]);
+            particle.classList.add(spins[Math.floor(Math.random() * spins.length)]);
+            
+            // Si c'est un emoji, ajouter la classe icon
+            if (text.length === 2 || /[\u{1F300}-\u{1FAD6}]/u.test(text)) {
+                particle.classList.add('particle-icon');
+            }
+            
+            // Position aléatoire sur la largeur du bouton
+            const btnRect = btn.getBoundingClientRect();
+            const containerRect = container.getBoundingClientRect();
+            
+            const randomX = Math.random() * btnRect.width;
+            particle.style.left = `${randomX}px`;
+            particle.style.top = '50%';
+            
+            container.appendChild(particle);
+            
+            // Supprimer après l'animation
+            setTimeout(() => {
+                particle.remove();
+            }, 2000);
+        }
+
+        function startParticles() {
+            isHovering = true;
+            // Burst initial de particules
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => createParticle(), i * 50);
+            }
+            // Puis continue à en créer
+            particleInterval = setInterval(() => {
+                if (isHovering) {
+                    createParticle();
+                }
+            }, 100);
+        }
+
+        function stopParticles() {
+            isHovering = false;
+            clearInterval(particleInterval);
+        }
+
+        btn.addEventListener('mouseenter', startParticles);
+        btn.addEventListener('mouseleave', stopParticles);
+
         function handleClick() {
-            // Tu peux remplacer cette URL par ton formulaire ou ta page
-            window.open('https://sweet-chord-e04.notion.site/ab8ed67f11164814865402591b074a7b?pvs=105', '_blank');
+            // Burst de particules au clic
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => createParticle(), i * 30);
+            }
+            
+            // Tu peux remplacer cette URL par ton formulaire
+            // window.open('https://example.com/submit-event', '_blank');
         }
     </script>
 </body>
