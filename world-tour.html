@@ -328,14 +328,19 @@
             overflow: hidden;
             transition: all 0.3s ease;
             font-size: 10px;
+            z-index: 50;
         }
 
         .control-panel.collapsed {
             width: auto;
+            min-width: 44px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .control-panel.collapsed .control-toggle {
             justify-content: center;
+            padding: 12px 14px;
         }
 
         .control-panel.collapsed .control-content {
@@ -364,7 +369,7 @@
         }
 
         .control-toggle-icon {
-            font-size: 16px;
+            font-size: 20px;
             transition: transform 0.5s ease;
         }
 
@@ -693,6 +698,30 @@
             font-weight: 600;
         }
 
+        .modal-event-number {
+            font-size: 11px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .modal-highlights {
+            margin: 5px 0 0 0;
+            padding-left: 18px;
+            font-size: 13px;
+            opacity: 0.9;
+            list-style-type: '✓ ';
+        }
+
+        .modal-highlights li {
+            margin-bottom: 5px;
+            padding-left: 5px;
+        }
+
         .modal-body {
             display: flex;
             flex-direction: column;
@@ -817,7 +846,7 @@
     <div class="ui-overlay">
         <div class="header-stats">
             <div class="travelers-count" id="visitorCount">0</div>
-            <div class="travelers-label">🌍 World Travelers</div>
+            <div class="travelers-label">🎮 Events Visited</div>
         </div>
 
         <div class="instructions">🖱️ Drag to rotate • Scroll to zoom</div>
@@ -958,170 +987,321 @@
         };
         // ============================================================
 
-        // ============ CITIES DATA - MODIFIE ICI LES INFOS DES EVENTS ============
-        const cities = [
-            { 
-                name: "Paris", 
-                flag: "🇫🇷", 
-                event: "Paris Games Week", 
-                unlock: "L'aventure commence !", 
-                lat: 48.8566, 
-                lng: 2.3522, 
-                threshold: 0, 
-                color: 0x667eea,
-                // === INFOS EVENT À REMPLIR ===
-                eventDetails: {
-                    fullName: "Paris Games Week 2025",
-                    dates: "23 - 27 Octobre 2025",
-                    venue: "Paris Expo - Porte de Versailles",
-                    website: "https://www.parisgamesweek.com",
-                    description: "Le plus grand salon du jeu vidéo en France. Rencontrez les plus grands éditeurs et découvrez les prochaines sorties.",
-                    attendees: "300,000+",
-                    type: "Public & B2B",
-                    tags: ["AAA", "Indie", "Esport", "Cosplay"]
+        // ============================================================
+        // 🎮 MES ÉVÉNEMENTS - AJOUTE TES EVENTS ICI
+        // ============================================================
+        // Les événements sont automatiquement triés par date
+        // Copie un bloc et remplis les infos pour ajouter un nouvel event
+        // ============================================================
+        
+        const MY_EVENTS = [
+            // ========== 2024 ==========
+            {
+                date: "2024-03-18",
+                city: "San Francisco",
+                country: "USA",
+                flag: "🇺🇸",
+                lat: 37.7749,
+                lng: -122.4194,
+                color: 0x4facfe,
+                building: "goldengate",
+                event: {
+                    name: "GDC 2024",
+                    fullName: "Game Developers Conference 2024",
+                    dates: "18 - 22 Mars 2024",
+                    venue: "Moscone Center, San Francisco",
+                    website: "https://gdconf.com",
+                    description: "Point de départ de mon World Tour gaming !",
+                    type: "B2B / Developers",
+                    tags: ["Dev", "Networking", "UE5"],
+                    memories: "",
+                    highlights: []
                 }
             },
-            { 
-                name: "Cologne", 
-                flag: "🇩🇪", 
-                event: "Gamescom", 
-                unlock: "🎫 Premier event débloqué !", 
-                lat: 50.9375, 
-                lng: 6.9603, 
-                threshold: 100, 
-                color: 0xffcc00,
-                eventDetails: {
-                    fullName: "Gamescom 2025",
-                    dates: "20 - 24 Août 2025",
+            {
+                date: "2024-04-23",
+                city: "Prague",
+                country: "Czech Republic",
+                flag: "🇨🇿",
+                lat: 50.0755,
+                lng: 14.4378,
+                color: 0x9b59b6,
+                building: "cathedral",
+                event: {
+                    name: "Unreal Fest Prague 2024",
+                    fullName: "Unreal Fest Prague 2024",
+                    dates: "23 - 24 Avril 2024",
+                    venue: "O2 Universum, Prague",
+                    website: "https://www.unrealengine.com/unrealfest",
+                    description: "La conférence européenne dédiée à Unreal Engine.",
+                    type: "B2B / Developers",
+                    tags: ["UE5", "Tech", "Epic Games"],
+                    memories: "",
+                    highlights: []
+                }
+            },
+            {
+                date: "2024-06-14",
+                city: "Hamburg",
+                country: "Germany",
+                flag: "🇩🇪",
+                lat: 53.5511,
+                lng: 9.9937,
+                color: 0xe74c3c,
+                building: "cathedral",
+                event: {
+                    name: "Gamecamp 2024",
+                    fullName: "Gamecamp Hamburg 2024",
+                    dates: "14 - 15 Juin 2024",
+                    venue: "Hamburg",
+                    website: "https://gamecamp.de",
+                    description: "Barcamp gaming allemand, format participatif.",
+                    type: "B2B / Unconference",
+                    tags: ["Indie", "Networking", "Germany"],
+                    memories: "",
+                    highlights: []
+                }
+            },
+            {
+                date: "2024-08-21",
+                city: "Cologne",
+                country: "Germany",
+                flag: "🇩🇪",
+                lat: 50.9375,
+                lng: 6.9603,
+                color: 0xf39c12,
+                building: "cathedral",
+                event: {
+                    name: "Gamescom 2024",
+                    fullName: "Gamescom 2024",
+                    dates: "21 - 25 Août 2024",
                     venue: "Koelnmesse, Cologne",
                     website: "https://www.gamescom.global",
-                    description: "Le plus grand salon gaming au monde. L'événement incontournable de l'industrie européenne.",
-                    attendees: "370,000+",
+                    description: "Le plus grand salon gaming au monde !",
                     type: "Public & B2B",
-                    tags: ["AAA", "Indie", "Hardware", "Esport"]
+                    tags: ["AAA", "Indie", "Business", "Networking"],
+                    memories: "",
+                    highlights: []
                 }
             },
-            { 
-                name: "London", 
-                flag: "🇬🇧", 
-                event: "PG Connects London", 
-                unlock: "🗺️ New territory unlocked !", 
-                lat: 51.5074, 
-                lng: -0.1278, 
-                threshold: 300, 
-                color: 0xff6b6b,
-                eventDetails: {
-                    fullName: "Pocket Gamer Connects London 2025",
-                    dates: "20 - 21 Janvier 2025",
-                    venue: "ExCeL London",
-                    website: "https://www.pgconnects.com/london",
-                    description: "La conférence B2B leader pour l'industrie du jeu mobile et au-delà.",
-                    attendees: "2,500+",
-                    type: "B2B Only",
-                    tags: ["Mobile", "Networking", "Indie", "Publishers"]
+            {
+                date: "2024-10-01",
+                city: "Seattle",
+                country: "USA",
+                flag: "🇺🇸",
+                lat: 47.6062,
+                lng: -122.3321,
+                color: 0x3498db,
+                building: "default",
+                event: {
+                    name: "Unreal Fest Seattle 2024",
+                    fullName: "Unreal Fest Seattle 2024",
+                    dates: "1 - 3 Octobre 2024",
+                    venue: "Seattle Convention Center",
+                    website: "https://www.unrealengine.com/unrealfest",
+                    description: "Le flagship Unreal Fest américain.",
+                    type: "B2B / Developers",
+                    tags: ["UE5", "Tech", "Epic Games", "USA"],
+                    memories: "",
+                    highlights: []
                 }
             },
-            { 
-                name: "San Francisco", 
-                flag: "🇺🇸", 
-                event: "GDC", 
-                unlock: "🎬 Dev zone reached !", 
-                lat: 37.7749, 
-                lng: -122.4194, 
-                threshold: 600, 
+            
+            // ========== 2025 ==========
+            {
+                date: "2025-03-17",
+                city: "San Francisco",
+                country: "USA",
+                flag: "🇺🇸",
+                lat: 37.7749,
+                lng: -122.4194,
                 color: 0x4facfe,
-                eventDetails: {
+                building: "goldengate",
+                event: {
+                    name: "GDC 2025",
                     fullName: "Game Developers Conference 2025",
                     dates: "17 - 21 Mars 2025",
                     venue: "Moscone Center, San Francisco",
                     website: "https://gdconf.com",
-                    description: "La plus grande conférence pour les développeurs de jeux. Talks, workshops et networking.",
-                    attendees: "28,000+",
+                    description: "Retour à la GDC pour une nouvelle édition !",
                     type: "B2B / Developers",
-                    tags: ["Dev", "Tech", "Career", "Awards"]
+                    tags: ["Dev", "Networking", "UE5", "Business"],
+                    memories: "",
+                    highlights: []
                 }
             },
-            { 
-                name: "Los Angeles", 
-                flag: "🇺🇸", 
-                event: "Summer Game Fest", 
-                unlock: "⭐ Hollywood level !", 
-                lat: 34.0522, 
-                lng: -118.2437, 
-                threshold: 1000, 
-                color: 0xf093fb,
-                eventDetails: {
-                    fullName: "Summer Game Fest 2025",
-                    dates: "Juin 2025",
-                    venue: "YouTube Theater, Los Angeles",
-                    website: "https://www.summergamefest.com",
-                    description: "L'événement qui remplace l'E3. Annonces mondiales et showcases des plus grands studios.",
-                    attendees: "Millions (streaming)",
-                    type: "Public / Streaming",
-                    tags: ["Annonces", "AAA", "World Premieres"]
+            {
+                date: "2025-07-08",
+                city: "Brighton",
+                country: "UK",
+                flag: "🇬🇧",
+                lat: 50.8225,
+                lng: -0.1372,
+                color: 0x1abc9c,
+                building: "bigben",
+                event: {
+                    name: "Develop Brighton 2025",
+                    fullName: "Develop:Brighton 2025",
+                    dates: "8 - 10 Juillet 2025",
+                    venue: "Brighton Centre",
+                    website: "https://www.developconference.com",
+                    description: "La conférence dev gaming majeure au UK.",
+                    type: "B2B / Developers",
+                    tags: ["UK", "Dev", "Indie", "Networking"],
+                    memories: "",
+                    highlights: []
                 }
             },
-            { 
-                name: "Tokyo", 
-                flag: "🇯🇵", 
-                event: "Tokyo Game Show", 
-                unlock: "🏆 Legendary destination !", 
-                lat: 35.6762, 
-                lng: 139.6503, 
-                threshold: 2000, 
-                color: 0xff4757,
-                eventDetails: {
-                    fullName: "Tokyo Game Show 2025",
-                    dates: "25 - 28 Septembre 2025",
-                    venue: "Makuhari Messe, Tokyo",
-                    website: "https://tgs.nikkeibp.co.jp",
-                    description: "Le salon gaming majeur en Asie. Focus sur les studios japonais et les dernières innovations.",
-                    attendees: "250,000+",
+            {
+                date: "2025-08-20",
+                city: "Cologne",
+                country: "Germany",
+                flag: "🇩🇪",
+                lat: 50.9375,
+                lng: 6.9603,
+                color: 0xf39c12,
+                building: "cathedral",
+                event: {
+                    name: "Gamescom 2025",
+                    fullName: "Gamescom 2025",
+                    dates: "20 - 24 Août 2025",
+                    venue: "Koelnmesse, Cologne",
+                    website: "https://www.gamescom.global",
+                    description: "Retour à Cologne pour la Gamescom !",
                     type: "Public & B2B",
-                    tags: ["JRPG", "Japanese Games", "Tech", "VR"]
+                    tags: ["AAA", "Indie", "Business", "Networking"],
+                    memories: "",
+                    highlights: []
                 }
             },
-            { 
-                name: "Bali", 
-                flag: "🇮🇩", 
-                event: "IGDX", 
-                unlock: "🏝️ Hidden gem found !", 
-                lat: -8.3405, 
-                lng: 115.0920, 
-                threshold: 3500, 
-                color: 0x2ed573,
-                eventDetails: {
+            {
+                date: "2025-10-08",
+                city: "Bali",
+                country: "Indonesia",
+                flag: "🇮🇩",
+                lat: -8.3405,
+                lng: 115.0920,
+                color: 0x2ecc71,
+                building: "temple",
+                event: {
+                    name: "IGDX 2025",
                     fullName: "Indonesia Game Developer Exchange 2025",
-                    dates: "Octobre 2025",
+                    dates: "8 - 10 Octobre 2025",
                     venue: "Bali, Indonesia",
                     website: "https://igdx.id",
-                    description: "La conférence B2B gaming en pleine croissance en Asie du Sud-Est. Networking dans un cadre paradisiaque.",
-                    attendees: "1,000+",
-                    type: "B2B Only",
-                    tags: ["SEA", "Indie", "Mobile", "Networking"]
+                    description: "Conférence B2B gaming en Asie du Sud-Est.",
+                    type: "B2B",
+                    tags: ["SEA", "Indie", "Mobile", "Networking"],
+                    memories: "",
+                    highlights: []
                 }
             },
-            { 
-                name: "Worldwide", 
-                flag: "🌍", 
-                event: "Global Domination", 
-                unlock: "🚀 You've conquered the world !", 
-                lat: 0, 
-                lng: 0, 
-                threshold: 5000, 
-                color: 0xffd700,
-                eventDetails: {
-                    fullName: "🏆 World Tour Complete!",
-                    dates: "All year round",
-                    venue: "Everywhere",
-                    website: "",
-                    description: "Félicitations ! Vous avez exploré tous les événements gaming majeurs du monde !",
-                    attendees: "∞",
-                    type: "Achievement",
-                    tags: ["Complete", "Legend", "Explorer"]
+            {
+                date: "2025-10-16",
+                city: "Bangkok",
+                country: "Thailand",
+                flag: "🇹🇭",
+                lat: 13.7563,
+                lng: 100.5018,
+                color: 0xe91e63,
+                building: "torii",
+                event: {
+                    name: "Gamescom Asia 2025",
+                    fullName: "Gamescom Asia 2025",
+                    dates: "16 - 18 Octobre 2025",
+                    venue: "Queen Sirikit National Convention Center, Bangkok",
+                    website: "https://www.gamescom.asia",
+                    description: "La version asiatique de Gamescom !",
+                    type: "Public & B2B",
+                    tags: ["Asia", "AAA", "Indie", "SEA"],
+                    memories: "",
+                    highlights: []
                 }
-            }
+            },
+            
+            // ========== 2026 - À VENIR ==========
+            {
+                date: "2026-01-19",
+                city: "London",
+                country: "UK",
+                flag: "🇬🇧",
+                lat: 51.5074,
+                lng: -0.1278,
+                color: 0xff6b6b,
+                building: "bigben",
+                event: {
+                    name: "PG Connects London 2026",
+                    fullName: "Pocket Gamer Connects London 2026",
+                    dates: "19 - 20 Janvier 2026",
+                    venue: "ExCeL London",
+                    website: "https://www.pgconnects.com/london",
+                    description: "🔜 À VENIR - Conférence B2B mobile gaming.",
+                    type: "B2B",
+                    tags: ["Mobile", "Networking", "Publishers", "UK"],
+                    memories: "",
+                    highlights: []
+                }
+            },
+            {
+                date: "2026-04-15",
+                city: "Dubrovnik",
+                country: "Croatia",
+                flag: "🇭🇷",
+                lat: 42.6507,
+                lng: 18.0944,
+                color: 0x00bcd4,
+                building: "default",
+                event: {
+                    name: "Reboot Develop Blue 2026",
+                    fullName: "Reboot Develop Blue 2026",
+                    dates: "Avril 2026",
+                    venue: "Dubrovnik, Croatia",
+                    website: "https://rebootdevelopblue.com",
+                    description: "🔜 À VENIR - La conf dev dans le décor de Game of Thrones !",
+                    type: "B2B / Developers",
+                    tags: ["Dev", "Indie", "Networking", "Croatia"],
+                    memories: "",
+                    highlights: []
+                }
+            },
+            
         ];
+
+        // ============================================================
+        // 🚀 TRAITEMENT AUTOMATIQUE (ne pas modifier)
+        // ============================================================
+        
+        // Trier les événements par date
+        MY_EVENTS.sort((a, b) => new Date(a.date) - new Date(b.date));
+        
+        // Convertir en format interne
+        const cities = MY_EVENTS.map((evt, index) => ({
+            name: evt.city,
+            flag: evt.flag,
+            event: evt.event.name,
+            lat: evt.lat,
+            lng: evt.lng,
+            color: evt.color,
+            building: evt.building,
+            date: evt.date,
+            eventDetails: {
+                fullName: evt.event.fullName,
+                dates: evt.event.dates,
+                venue: evt.event.venue,
+                website: evt.event.website,
+                description: evt.event.description,
+                type: evt.event.type,
+                tags: evt.event.tags,
+                memories: evt.event.memories || "",
+                highlights: evt.event.highlights || []
+            },
+            // Tous les events passés sont "débloqués"
+            isVisited: true,
+            index: index
+        }));
+        
+        // Nombre total d'events
+        const totalEvents = cities.length;
 
         // ============ THREE.JS VARIABLES ============
         let scene, camera, renderer, globeGroup;
@@ -1132,7 +1312,6 @@
         let currentRotation = { x: 0.3, y: 0 };
         let isDragging = false;
         let previousMousePosition = { x: 0, y: 0 };
-        let visitorCount = 0;
         let currentCityIndex = 0;
         let time = 0;
         let clock = new THREE.Clock();
@@ -1293,7 +1472,7 @@
             renderer.domElement.addEventListener('mouseleave', onMouseLeave);
             renderer.domElement.addEventListener('click', onCanvasClick);
 
-            initCounter();
+            initTimeline();
             animate();
         }
 
@@ -1344,7 +1523,6 @@
 
         function openModal(cityIndex, clickX, clickY) {
             var city = cities[cityIndex];
-            var isUnlocked = visitorCount >= city.threshold;
             var modalInner = document.getElementById('modalInner');
             var modalContent = document.querySelector('.modal-content');
             var modalOverlay = document.getElementById('eventModal');
@@ -1361,69 +1539,84 @@
                 modalContent.style.transform = 'translate(-50%, -50%) scale(0.3)';
             }
             
-            if (isUnlocked) {
-                var details = city.eventDetails;
-                var tagsHTML = details.tags.map(function(tag) {
-                    return '<span class="modal-tag">' + tag + '</span>';
-                }).join('');
-                
-                var websiteHTML = details.website ? 
-                    '<a href="' + details.website + '" target="_blank" class="modal-website">🌐 Visiter le site officiel</a>' : '';
+            var details = city.eventDetails;
+            var tagsHTML = details.tags.map(function(tag) {
+                return '<span class="modal-tag">' + tag + '</span>';
+            }).join('');
+            
+            var websiteHTML = details.website ? 
+                '<a href="' + details.website + '" target="_blank" class="modal-website">🌐 Visiter le site officiel</a>' : '';
 
-                modalInner.innerHTML = 
-                    '<div class="modal-header">' +
-                        '<div class="modal-flag">' + city.flag + '</div>' +
-                        '<div class="modal-title">' + details.fullName + '</div>' +
-                        '<div class="modal-dates">📅 ' + details.dates + '</div>' +
+            // Souvenirs personnels (optionnel)
+            var memoriesHTML = details.memories ? 
+                '<div class="modal-row">' +
+                    '<span class="modal-icon">💭</span>' +
+                    '<div>' +
+                        '<div class="modal-label">Mes souvenirs</div>' +
+                        '<div class="modal-value modal-description">' + details.memories + '</div>' +
                     '</div>' +
-                    '<div class="modal-body">' +
-                        '<div class="modal-row">' +
-                            '<span class="modal-icon">📍</span>' +
-                            '<div>' +
-                                '<div class="modal-label">Lieu</div>' +
-                                '<div class="modal-value">' + details.venue + '</div>' +
-                            '</div>' +
+                '</div>' : '';
+
+            // Highlights (optionnel)
+            var highlightsHTML = '';
+            if (details.highlights && details.highlights.length > 0) {
+                var highlightsList = details.highlights.map(function(h) {
+                    return '<li>' + h + '</li>';
+                }).join('');
+                highlightsHTML = 
+                    '<div class="modal-row">' +
+                        '<span class="modal-icon">⭐</span>' +
+                        '<div>' +
+                            '<div class="modal-label">Points forts</div>' +
+                            '<ul class="modal-highlights">' + highlightsList + '</ul>' +
                         '</div>' +
-                        '<div class="modal-row">' +
-                            '<span class="modal-icon">👥</span>' +
-                            '<div>' +
-                                '<div class="modal-label">Visiteurs</div>' +
-                                '<div class="modal-value">' + details.attendees + '</div>' +
-                            '</div>' +
-                        '</div>' +
-                        '<div class="modal-row">' +
-                            '<span class="modal-icon">🎫</span>' +
-                            '<div>' +
-                                '<div class="modal-label">Type</div>' +
-                                '<div class="modal-value">' + details.type + '</div>' +
-                            '</div>' +
-                        '</div>' +
-                        '<div class="modal-row">' +
-                            '<span class="modal-icon">📝</span>' +
-                            '<div>' +
-                                '<div class="modal-label">Description</div>' +
-                                '<div class="modal-value modal-description">' + details.description + '</div>' +
-                            '</div>' +
-                        '</div>' +
-                        '<div class="modal-row">' +
-                            '<span class="modal-icon">🏷️</span>' +
-                            '<div>' +
-                                '<div class="modal-label">Tags</div>' +
-                                '<div class="modal-tags">' + tagsHTML + '</div>' +
-                            '</div>' +
-                        '</div>' +
-                        websiteHTML +
-                    '</div>';
-            } else {
-                modalInner.innerHTML = 
-                    '<div class="modal-locked">' +
-                        '<div class="modal-locked-icon">🔒</div>' +
-                        '<div class="modal-flag">' + city.flag + '</div>' +
-                        '<div class="modal-title">' + city.event + '</div>' +
-                        '<div class="modal-locked-text">Cette destination n\'est pas encore débloquée</div>' +
-                        '<div class="modal-locked-requirement">🎯 Requis : ' + city.threshold + ' visiteurs</div>' +
                     '</div>';
             }
+
+            // Numéro dans la timeline
+            var eventNumber = cityIndex + 1;
+            var totalEvents = cities.length;
+
+            modalInner.innerHTML = 
+                '<div class="modal-header">' +
+                    '<div class="modal-event-number">Event #' + eventNumber + '/' + totalEvents + '</div>' +
+                    '<div class="modal-flag">' + city.flag + '</div>' +
+                    '<div class="modal-title">' + details.fullName + '</div>' +
+                    '<div class="modal-dates">📅 ' + details.dates + '</div>' +
+                '</div>' +
+                '<div class="modal-body">' +
+                    '<div class="modal-row">' +
+                        '<span class="modal-icon">📍</span>' +
+                        '<div>' +
+                            '<div class="modal-label">Lieu</div>' +
+                            '<div class="modal-value">' + details.venue + '</div>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="modal-row">' +
+                        '<span class="modal-icon">🎫</span>' +
+                        '<div>' +
+                            '<div class="modal-label">Type</div>' +
+                            '<div class="modal-value">' + details.type + '</div>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="modal-row">' +
+                        '<span class="modal-icon">📝</span>' +
+                        '<div>' +
+                            '<div class="modal-label">Description</div>' +
+                            '<div class="modal-value modal-description">' + details.description + '</div>' +
+                        '</div>' +
+                    '</div>' +
+                    memoriesHTML +
+                    highlightsHTML +
+                    '<div class="modal-row">' +
+                        '<span class="modal-icon">🏷️</span>' +
+                        '<div>' +
+                            '<div class="modal-label">Tags</div>' +
+                            '<div class="modal-tags">' + tagsHTML + '</div>' +
+                        '</div>' +
+                    '</div>' +
+                    websiteHTML +
+                '</div>';
 
             // Déclencher l'animation après un petit délai
             requestAnimationFrame(function() {
@@ -1454,31 +1647,46 @@
         // ============ GLOBE AVEC TEXTURE ============
         function createGlobe() {
             const globeGeometry = new THREE.SphereGeometry(1, 64, 64);
-            const textureLoader = new THREE.TextureLoader();
             
-            // Charger la texture
+            // Créer d'abord un globe basique (visible immédiatement)
+            const basicMaterial = new THREE.MeshPhongMaterial({
+                color: 0x1a4a7a,
+                emissive: 0x0a1a2a,
+                emissiveIntensity: 0.3,
+                shininess: 10
+            });
+            const globe = new THREE.Mesh(globeGeometry, basicMaterial);
+            globe.name = 'earth';
+            globeGroup.add(globe);
+            
+            // Ajouter des continents simplifiés
+            createFallbackContinents();
+            
+            // Puis essayer de charger la texture
+            const textureLoader = new THREE.TextureLoader();
             textureLoader.load(
                 CONFIG.earthTexture,
-                // Succès : texture chargée
                 function(texture) {
                     console.log('✅ Texture Terre chargée !');
-                    const globeMaterial = new THREE.MeshPhongMaterial({
+                    globe.material = new THREE.MeshPhongMaterial({
                         map: texture,
                         bumpMap: texture,
                         bumpScale: 0.02,
                         specular: new THREE.Color(0x333333),
                         shininess: 5
                     });
-                    const globe = new THREE.Mesh(globeGeometry, globeMaterial);
-                    globe.name = 'earth';
-                    globeGroup.add(globe);
+                    // Supprimer les continents fallback
+                    var continentsToRemove = [];
+                    globeGroup.traverse(function(child) {
+                        if (child.userData && child.userData.isFallbackContinent) {
+                            continentsToRemove.push(child);
+                        }
+                    });
+                    continentsToRemove.forEach(function(c) { globeGroup.remove(c); });
                 },
-                // Progression
                 undefined,
-                // Erreur : utiliser le fallback
                 function(error) {
-                    console.log('⚠️ Texture non trouvée, utilisation du style par défaut');
-                    createFallbackGlobe(globeGeometry);
+                    console.log('⚠️ Texture non trouvée, garde le style par défaut');
                 }
             );
 
@@ -1507,18 +1715,7 @@
 
         // Globe de secours si pas de texture
         function createFallbackGlobe(geometry) {
-            const globeMaterial = new THREE.MeshPhongMaterial({
-                color: 0x1a4a7a,
-                emissive: 0x0a1a2a,
-                emissiveIntensity: 0.3,
-                shininess: 10
-            });
-            const globe = new THREE.Mesh(geometry, globeMaterial);
-            globe.name = 'earth';
-            globeGroup.add(globe);
-            
-            // Ajouter des continents simplifiés
-            createFallbackContinents();
+            // Non utilisé maintenant, le fallback est intégré dans createGlobe
         }
 
         function createFallbackContinents() {
@@ -1555,6 +1752,7 @@
                 mesh.position.copy(pos);
                 mesh.lookAt(0, 0, 0);
                 mesh.rotateX(Math.PI);
+                mesh.userData.isFallbackContinent = true;
                 globeGroup.add(mesh);
             });
         }
@@ -1637,7 +1835,7 @@
                 markerGroup.add(hitbox);
 
                 // === BÂTIMENT 3D CARTOON ===
-                var building = createCityBuilding(city.name, city.color);
+                var building = createCityBuilding(city.building || 'default', city.color);
                 building.position.y = 0.0;
                 markerGroup.add(building);
 
@@ -1689,29 +1887,29 @@
         }
 
         // ============ CARTOON BUILDINGS ============
-        function createCityBuilding(cityName, color) {
+        function createCityBuilding(buildingType, color) {
             var building = new THREE.Group();
             
-            switch(cityName) {
-                case "Paris":
+            switch(buildingType) {
+                case "eiffel":
                     building = createEiffelTower(color);
                     break;
-                case "Cologne":
+                case "cathedral":
                     building = createCathedral(color);
                     break;
-                case "London":
+                case "bigben":
                     building = createBigBen(color);
                     break;
-                case "San Francisco":
+                case "goldengate":
                     building = createGoldenGate(color);
                     break;
-                case "Los Angeles":
+                case "hollywood":
                     building = createHollywood(color);
                     break;
-                case "Tokyo":
+                case "torii":
                     building = createTorii(color);
                     break;
-                case "Bali":
+                case "temple":
                     building = createBaliTemple(color);
                     break;
                 default:
@@ -2190,11 +2388,11 @@
                 // Afficher le tooltip
                 if (hoveredCityIndex >= 0) {
                     var city = cities[hoveredCityIndex];
-                    var isUnlocked = visitorCount >= city.threshold;
+                    var dateStr = new Date(city.date).toLocaleDateString('fr-FR', { month: 'short', year: 'numeric' });
                     
                     document.getElementById('tooltipFlag').textContent = city.flag;
                     document.getElementById('tooltipName').textContent = city.name;
-                    document.getElementById('tooltipEvent').textContent = isUnlocked ? city.event : '🔒 ' + city.threshold + ' visitors';
+                    document.getElementById('tooltipEvent').textContent = city.event + ' • ' + dateStr;
                     
                     tooltip.style.left = (e.clientX + 15) + 'px';
                     tooltip.style.top = (e.clientY - 10) + 'px';
@@ -2252,72 +2450,57 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         }
 
-        // ============ COUNTER ============
-        async function initCounter() {
-            try {
-                var response = await fetch('https://api.countapi.xyz/hit/luxstudio-events/world-tour-v5');
-                var data = await response.json();
-                visitorCount = data.value;
-            } catch (e) {
-                visitorCount = Math.floor(Math.random() * 1500) + 300;
-            }
+        // ============ TIMELINE INIT ============
+        function initTimeline() {
+            // Le personnage est sur le dernier event
+            currentCityIndex = Math.max(0, cities.length - 1);
             updateUI();
         }
 
         function updateUI() {
-            animateNumber(document.getElementById('visitorCount'), 0, visitorCount, 2000);
-
-            currentCityIndex = 0;
-            for (var i = cities.length - 1; i >= 0; i--) {
-                if (visitorCount >= cities[i].threshold) {
-                    currentCityIndex = i;
-                    break;
-                }
-            }
+            // Afficher le nombre d'events
+            animateNumber(document.getElementById('visitorCount'), 0, cities.length, 1500);
 
             var currentCity = cities[currentCityIndex];
-            var nextCity = cities[Math.min(currentCityIndex + 1, cities.length - 1)];
+            var isFirst = currentCityIndex === 0;
+            var isLast = currentCityIndex === cities.length - 1;
 
+            // Carte du bas
             document.getElementById('locationFlag').textContent = currentCity.flag;
             document.getElementById('locationCity').textContent = currentCity.name;
             document.getElementById('locationEvent').textContent = currentCity.event;
-            document.getElementById('locationUnlock').innerHTML = '<span>🎮</span><span>' + currentCity.unlock + '</span>';
-
-            var progressToNext = currentCity.threshold === nextCity.threshold ? 100 :
-                ((visitorCount - currentCity.threshold) / (nextCity.threshold - currentCity.threshold)) * 100;
             
-            document.getElementById('progressFill').style.width = Math.min(progressToNext, 100) + '%';
-            document.getElementById('progressCurrent').textContent = currentCity.name;
-            document.getElementById('progressNext').textContent = 
-                currentCityIndex < cities.length - 1 ? 'Next: ' + nextCity.name + ' (' + nextCity.threshold + ')' : '🏆 Complete!';
+            // Afficher la date au lieu du message de déblocage
+            var dateFormatted = new Date(currentCity.date).toLocaleDateString('fr-FR', { 
+                month: 'long', 
+                year: 'numeric' 
+            });
+            document.getElementById('locationUnlock').innerHTML = '<span>📅</span><span>' + dateFormatted + '</span>';
 
+            // Progress bar (basée sur le nombre d'events)
+            var progress = ((currentCityIndex + 1) / cities.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressCurrent').textContent = 'Event ' + (currentCityIndex + 1) + '/' + cities.length;
+            document.getElementById('progressNext').textContent = 
+                isLast ? '🏆 Dernier event !' : 'Next: ' + cities[currentCityIndex + 1].name;
+
+            // Légende
             var legendHTML = '';
             cities.forEach(function(city, index) {
-                var unlockedClass = visitorCount >= city.threshold ? 'unlocked' : '';
+                var visitedClass = 'unlocked'; // Tous les events sont visités
                 var currentClass = index === currentCityIndex ? 'current' : '';
-                legendHTML += '<div class="legend-item ' + unlockedClass + ' ' + currentClass + '" onclick="openModal(' + index + ', event.clientX, event.clientY)">' +
+                var dateStr = new Date(city.date).toLocaleDateString('fr-FR', { month: 'short', year: '2-digit' });
+                legendHTML += '<div class="legend-item ' + visitedClass + ' ' + currentClass + '" onclick="openModal(' + index + ', event.clientX, event.clientY)">' +
                     '<span class="legend-dot"></span>' +
-                    '<span>' + city.flag + ' ' + city.name + '</span>' +
+                    '<span>' + city.flag + ' ' + city.name + ' <small style="opacity:0.5">(' + dateStr + ')</small></span>' +
                     '</div>';
             });
             document.getElementById('legendItems').innerHTML = legendHTML;
 
-            cityMarkers.forEach(function(marker, index) {
-                var unlocked = visitorCount >= cities[index].threshold;
-                // La scale est gérée dans l'animation loop
-                // Ici on gère juste l'opacité des matériaux si non débloqué
-                marker.traverse(function(child) {
-                    if (child.isMesh && child.material && !child.userData.isPulseRing) {
-                        if (!unlocked) {
-                            child.material.transparent = true;
-                            child.material.opacity = 0.4;
-                        }
-                    }
-                });
-            });
-
-            var maxThreshold = cities[cities.length - 1].threshold;
-            updateCharacterPosition(Math.min(visitorCount / maxThreshold, 0.99));
+            // Position du personnage (sur le dernier event)
+            if (cities.length > 0) {
+                updateCharacterPosition(currentCityIndex / Math.max(cities.length - 1, 1));
+            }
         }
 
         function animateNumber(el, start, end, duration) {
@@ -2359,11 +2542,10 @@
             // Pulse current city marker + animate rings + hover effect
             cityMarkers.forEach(function(marker, index) {
                 var isCurrent = index === currentCityIndex;
-                var isUnlocked = visitorCount >= cities[index].threshold;
                 var isHovered = marker.userData.isHovered;
                 
                 // Scale du marqueur avec le multiplicateur global + hover boost
-                var baseScale = isCurrent ? 1.3 : (isUnlocked ? 1 : 0.6);
+                var baseScale = isCurrent ? 1.3 : 1;
                 var pulseScale = isCurrent ? Math.sin(time * 3) * 0.1 : 0;
                 var hoverBoost = isHovered ? 0.3 : 0;
                 marker.scale.setScalar((baseScale + pulseScale + hoverBoost) * settings.markerScale);
@@ -2381,7 +2563,7 @@
                             child.material.opacity = 0.4 - Math.sin(time * 2) * 0.2;
                         } else {
                             child.scale.set(1, 1, 1);
-                            child.material.opacity = isUnlocked ? 0.2 : 0.1;
+                            child.material.opacity = 0.2;
                         }
                     }
                     
